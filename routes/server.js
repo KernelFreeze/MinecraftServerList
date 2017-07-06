@@ -63,7 +63,7 @@ router.post('/new', newLimiter, recaptcha.middleware.verify, ensureLoggedIn('/lo
 
     server.save(function (err) {
         if (err) {
-            req.flash('danger', "No se pudo registrar el servidor. Revisa que no halla sido añadido por otro usuario. Si crees que es un error avísanos en Twitter: @KernelFreeze");
+            req.flash('danger', "No se pudo registrar el servidor. Revisa que no halla sido añadido por otro usuario. Si crees que es un error avísanos en Twitter: @Servidores__MC");
             return res.redirect('/server');
         }
 
