@@ -262,12 +262,16 @@ ul.cat.list-inline li a:hover {
 
 .footer {
     position: relative;
-    margin-top: -48px;
-    height: 56px;
+    margin-top: -50px;
+    height: 86px;
     clear:both;
     padding-top:20px;
     background: #222222;
     color: #f1f1f1;
+}
+
+.footer a {
+    color: darkgray;
 }
 
 .bootstrap-tagsinput {
