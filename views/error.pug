@@ -10,3 +10,11 @@ block content
           h4= error.status
           if(debug)
             pre #{error.stack}
+          else
+            pre
+              | ¡Houston tenemos un problema!
+              br
+              if(error.status == 404)
+                | No se ha encontrado la página que buscabas :/
+              else
+                | Hubo un error interno :O ¡Intentaremos arreglarlo!
