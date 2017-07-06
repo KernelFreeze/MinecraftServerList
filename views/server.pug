@@ -25,7 +25,7 @@ block content
                                 td #{server.owner.displayName}
                             tr
                                 td Estado
-                                if(new Date() - server.lastcheck > 120 * 1000)
+                                if(new Date() - server.lastcheck < 120 * 1000)
                                     td En línea
                                 else
                                     td No disponible
