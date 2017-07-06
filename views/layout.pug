@@ -1,0 +1,92 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title #{title} | Servidores Minecraft
+
+    meta(name='description', content='Lista de los mejores servidores de Minecraft de Habla Hispana')
+    meta(name='keywords', content='Minecraft, Servers, Servidores, Premium, No Premium')
+    meta(name='author', content='KernelFreeze')
+
+    link(rel='shortcut icon', href='/favicon.ico', type='image/x-icon')
+
+    // Bootstrap
+    link(rel='stylesheet', type='text/css', href='/css/bootstrap.css')
+    link(rel='stylesheet', type='text/css', href='/css/font-awesome.css')
+
+    // CSS
+    link(rel='stylesheet', type='text/css', href='/css/style.css')
+    link(rel='stylesheet', type='text/css', href='/css/responsive.css')
+    block css
+
+    script(type='text/javascript', src='/js/modernizr.custom.js')
+
+    link(href='http://fonts.googleapis.com/css?family=Raleway:500,600,700,100,800,900,400,200,300', rel='stylesheet', type='text/css')
+  body
+    #wrap
+      #main
+        #tf-home
+          .overlay
+            #sticky-anchor
+            nav#tf-menu.navbar.navbar-default
+              .container
+                .navbar-header
+                  button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
+                    span.sr-only Toggle navigation
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+                  a.navbar-brand.logo(href='/') Servidores de Minecraft
+
+                #bs-example-navbar-collapse-1.collapse.navbar-collapse
+                  ul.nav.navbar-nav.navbar-right
+                    li
+                      a(href='/players')
+                        i.fa.fa-arrow-up(aria-hidden='true')
+                        |  Número de jugadores
+                    li
+                      a(href='/free')
+                        i.fa.fa-fire(aria-hidden='true')
+                        |  No premium
+                    li
+                      a(href='/premium')
+                        i.fa.fa-check(aria-hidden='true')
+                        |  Premium
+                    if (!user)
+                      li
+                        a(href='/login') Iniciar sesión
+                    else
+                      li
+                        a(href='/server')
+                          i.fa.fa-rocket(aria-hidden='true')
+                          |  Mis servidores
+                      li
+                        a(href='/logout')
+                          i.fa.fa-sign-out(aria-hidden='true')
+                          |  Cerrar sesión
+            block head
+        .container
+          .row
+            .col-md-6.col-md-offset-3
+              while message = flash.shift()
+                .space
+                .alert.alert-dismissable(class='alert-' + message.type)
+                  a.close(href="#", data-dismiss="alert", aria-label="close") &times;
+                  | #{message.message}
+        block content
+    footer.footer
+      .container
+        .pull-left
+          p
+            | &copy; !{'<script>document.write(new Date().getFullYear())</script>'}
+            |  ¡Hecho con&nbsp;
+            i.glyphicon.glyphicon-heart-empty.text-danger(aria-hidden='true')
+            |  y mucho esfuerzo!
+
+    // JS
+    script(type='text/javascript', src='/js/jquery.min.js')
+    script(type='text/javascript', src="/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")
+    script(type='text/javascript', src='/js/main.js')
+    block javascript

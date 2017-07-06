@@ -1,0 +1,69 @@
+extends layout
+
+block content
+  .container
+    .section-title
+      h1.text-center #{title}
+      hr
+    .row
+      .col-md-8.col-md-offset-2
+        if(servers.length <= 0)
+          p ¡No se ha encontrado ningún servidor! Intenta realizando otra búsqueda.
+        else
+          table.table.table-striped
+            thead
+              tr
+                th
+                th Servidor
+                th IP
+                th Jugadores
+                if(show_type)
+                  th Tipo
+                th
+                  i.glyphicon.glyphicon-heart-empty(aria-hidden='true')
+            tbody
+              each server in servers
+                tr
+                  td: a(href='/server/' + server._id): img.img-thumbnail(src=server.icon, style='width: 100%; max-width: 64px; max-height: 64px; display: block')
+                  td: a(href='/server/' + server._id) #{server.name}
+                  td
+                    a.copy(data-toggle="popover", data-placement="top", data-content="¡Copiado!", ip=server.fullip, href='#')
+                      | #{server.fullip}&nbsp;
+                      i.fa.fa-clone.text-info(aria-hidden='true')
+                  td #{server.players}/#{server.max}
+                  if(show_type)
+                    if server.type === 2
+                      td.text-danger Solo premium
+                    else if server.type === 1
+                      td.text-warning Semi-premium
+                    else
+                      td.text-success No premium
+                  td
+                    | #{server.likes || 0}&nbsp;
+                    i.fa.fa-heart.text-danger(aria-hidden='true')
+        .text-center
+          nav(aria-label='Page navigation')
+            ul.pagination
+              if(pagination.page <= 1)
+                li.disabled
+                  a(aria-label='Previous')
+                    span(aria-hidden='true') «
+              else
+                li
+                  a(href=url + '/' + (pagination.page - 1), aria-label='Previous')
+                    span(aria-hidden='true') «
+              - for(var i = 1; i <= pagination.pages; i++)
+                if(i === pagination.page)
+                  li.active
+                    a(href='#') #{i}
+                else
+                  li
+                    a(href=url + '/' + i) #{i}
+                if(pagination.page >= pagination.pages)
+                  li.disabled
+                    a(href='#', aria-label='Next')
+                      span(aria-hidden='true') »
+                else
+                  li
+                    a(href=url + '/' + (pagination.page + 1), aria-label='Next')
+                      span(aria-hidden='true') »

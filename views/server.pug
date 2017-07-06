@@ -1,0 +1,71 @@
+extends layout
+
+block css
+    link(rel='stylesheet', type='text/css', href='/css/bootstrap-tagsinput.css')
+
+block content
+    .container
+        .section-title
+            h3.text-center #{server.name}
+            hr
+        .space
+        if(server.automatic)
+            .alert.alert-dismissable.alert-warning
+                a.close(href='#', data-dismiss='alert', aria-label='close') &times;
+                | Este servidor fue añadido de forma automática, si te pertenece y deseas cambiar los datos, avísanos en nuestro
+                a(href='https://twitter.com/KernelFreeze')  Twitter
+        .row
+            .col-sm-6.col-md-4
+                .thumbnail
+                    img(src=server.icon)
+                    .caption
+                        table.table
+                            tr
+                                td Dueño
+                                td #{server.owner.displayName}
+                            tr
+                                td Estado
+                                if(new Date() - server.lastcheck > 120 * 1000)
+                                    td En línea
+                                else
+                                    td No disponible
+                            tr
+                                td IP
+                                td: a.copy(data-toggle='popover', data-placement='top', data-content='¡Copiado!', ip=server.fullip, href='#')
+                                    |  #{server.fullip}&nbsp;
+                                    i.fa.fa-clone.text-info(aria-hidden='true')
+                            tr
+                                td Jugadores
+                                td #{server.players}/#{server.max}
+                            tr
+                                td Versión
+                                td #{server.version.replace(/§[0-9a-fA-Flk]/g, '')}
+                            tr
+                                td Likes
+                                td #{server.likes}
+                            tr
+                                td Disponibilidad
+                                td #{parseInt(server.success / server.times * 100)}%
+                            tr
+                                td Comprobado
+                                td #{moment(server.lastcheck).fromNow()}
+                            tr
+                                td Etiquetas
+                                td #{server.games.join(', ') || 'Desconocidos'}
+                        a.btn.btn-warning(href='/server/' + server._id + '/like', role='button')
+                            i.glyphicon.glyphicon-heart-empty(aria-hidden='true')
+                            |  Me gusta
+                        if(user && server.owner._id === user._id)
+                            a.btn.btn-primary(href='/server/' + server._id + '/edit', role='button')
+                                i.glyphicon.glyphicon-edit(aria-hidden='true')
+                                |  Editar
+
+            .col-md-6
+                .panel.panel-default
+                    .panel-body
+                        p !{server.description.replace(/\n/g, '<br>')}
+                if(server.youtube)
+                    .panel.panel-default
+                        .panel-body
+                            .video-container
+                                iframe.video(src=server.embed, frameborder='0', allowfullscreen)
