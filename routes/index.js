@@ -41,6 +41,9 @@ router.get('/premium/:page(\\d+)?', function (req, res, next) {
 router.get('/tos', function (req, res, next) {
     res.render('tos', {title: 'Términos del servicio', user: req.user});
 });
+router.get('/privacy', function (req, res, next) {
+    res.render('tos', {title: 'Política de privacidad', user: req.user});
+});
 
 router.get('/who', function (req, res, next) {
     if(req.user) {
