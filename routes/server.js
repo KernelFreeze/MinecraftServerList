@@ -62,7 +62,10 @@ router.post('/new', newLimiter, recaptcha.middleware.verify, ensureLoggedIn('/lo
     });
 
     server.save(function (err) {
-        if (err) return next(err);
+        if (err) {
+            req.flash('danger', "No se pudo registrar el servidor. Revisa que no halla sido añadido por otro usuario. Si crees que es un error avísanos en Twitter: @KernelFreeze");
+            return res.redirect('/server');
+        }
 
         req.flash('success', "¡Servidor registrado! Espera unos minutos para que sea procesado.");
         res.redirect('/server');
@@ -99,7 +102,10 @@ router.post('/:id/edit', newLimiter, recaptcha.middleware.verify, ensureLoggedIn
         server.votifier_key = req.body.votifier_key;
 
         server.save(function (err) {
-            if (err) return next(err);
+            if (err) {
+                req.flash('danger', "No se pudo editar el servidor. Revisa que no halla sido añadido por otro usuario. Si crees que es un error avísanos en Twitter: @KernelFreeze");
+                return res.redirect('/server');
+            }
 
             req.flash('info', "Servidor editado");
             res.redirect('/server/' + req.params.id);

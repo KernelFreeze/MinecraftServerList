@@ -134,7 +134,7 @@ a:focus {
 }
 
 .logo {
-    font-family: 'Raleway';
+    font-family: 'Raleway', serif;
     color: white !important;
 }
 
@@ -317,6 +317,14 @@ ul.cat.list-inline li a:hover {
 .table td, .table th {
     text-align: center !important;
     vertical-align: middle !important;
+}
+
+.navbar-brand {
+    margin-top: -5px;
+}
+
+.navbar-form button {
+    margin-top: 0;
 }
 
 .video-container {

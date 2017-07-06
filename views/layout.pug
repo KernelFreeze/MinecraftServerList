@@ -38,10 +38,10 @@ html(lang='en')
                     span.icon-bar
                     span.icon-bar
                     span.icon-bar
-                  a.navbar-brand.logo(href='/') Servidores de Minecraft
-
-                #bs-example-navbar-collapse-1.collapse.navbar-collapse
-                  ul.nav.navbar-nav.navbar-right
+                  a.navbar-brand(href='/')
+                    img(alt='Brand', src='/img/logo.png')
+                .collapse.navbar-collapse
+                  ul.nav.navbar-nav.navbar-left
                     li
                       a(href='/players')
                         i.fa.fa-arrow-up(aria-hidden='true')
@@ -56,16 +56,28 @@ html(lang='en')
                         |  Premium
                     if (!user)
                       li
-                        a(href='/login') Iniciar sesión
+                        a(href='/login') Ingresar
                     else
-                      li
-                        a(href='/server')
-                          i.fa.fa-rocket(aria-hidden='true')
-                          |  Mis servidores
-                      li
-                        a(href='/logout')
-                          i.fa.fa-sign-out(aria-hidden='true')
-                          |  Cerrar sesión
+                      li.dropdown
+                        a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+                          | #{user.displayName}
+                          span.caret
+                        ul.dropdown-menu
+                          li
+                            a(href='/server')
+                              i.fa.fa-rocket(aria-hidden='true')
+                              |  Mis servidores
+                          li
+                            a(href='/logout')
+                              i.fa.fa-sign-out(aria-hidden='true')
+                              |  Cerrar sesión
+                  form.navbar-form.navbar-right(action='search', method='post')
+                    .input-group
+                      input.form-control(type='text', name='search', placeholder='Buscar...')
+                      .input-group-btn
+                        button.btn.btn-default(type='submit')
+                          i.glyphicon.glyphicon-search
+
             block head
         .container
           .row

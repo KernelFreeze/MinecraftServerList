@@ -5,7 +5,9 @@ const mongoosePaginate = require('mongoose-paginate');
 const serverSchem = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        index: true,
+        unique: true
     },
     port: {
         type: Number,
@@ -13,7 +15,8 @@ const serverSchem = new Schema({
     },
     ip: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     type: {
         type: Number,
@@ -94,6 +97,7 @@ function getYoutube(url){
     return ID;
 }
 
+serverSchem.index({name: 'text', ip: 'text', description: 'text', games: 'text'});
 serverSchem.plugin(mongoosePaginate);
 
 serverSchem.statics.findById = function (id, cb) {
