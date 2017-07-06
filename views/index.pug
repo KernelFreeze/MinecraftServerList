@@ -1,13 +1,14 @@
 extends layout
 
 block head
-  .container
-    .content
-      h1 Encuentra un servidor
-      h3 Aquí encontrarás los mejores servidores de Minecraft
-      a.btn.btn-default.btn-lg(href='#destacados')
-        i.fa.fa-rocket(aria-hidden=true)
-        |  ¡Comenzar!
+  if(pagination.page === 1)
+    .container
+      .content
+        h1 Encuentra un servidor
+        h3 Aquí encontrarás los mejores servidores de Minecraft
+        a.btn.btn-default.btn-lg(href='#destacados')
+          i.fa.fa-rocket(aria-hidden=true)
+          |  ¡Comenzar!
 
 block content
   #destacados.space
