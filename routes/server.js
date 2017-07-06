@@ -37,7 +37,7 @@ const newLimiter = new RateLimit({
     message: "No puedes crear tantos servidores en tan poco tiempo."
 });
 router.post('/new', newLimiter, recaptcha.middleware.verify, ensureLoggedIn('/login'), function (req, res, next) {
-    if (!req.recaptcha.error) {
+    if (req.recaptcha.error) {
         req.flash('danger', '¡No has completado el captcha!');
         return res.redirect('/server/');
     }
@@ -77,7 +77,7 @@ router.post('/new', newLimiter, recaptcha.middleware.verify, ensureLoggedIn('/lo
 });
 
 router.post('/:id/edit', newLimiter, recaptcha.middleware.verify, ensureLoggedIn('/login'), function (req, res, next) {
-    if (!req.recaptcha.error) {
+    if (req.recaptcha.error) {
         req.flash('danger', '¡No has completado el captcha!');
         return res.redirect('/server/' + validator.escape(req.params.id));
     }
@@ -161,7 +161,7 @@ const likeLimiter = new RateLimit({
     message: "Vuelve mañana para darle like a otro servidor."
 });
 router.post('/:id/like', likeLimiter, recaptcha.middleware.verify, function (req, res, next) {
-    if (!req.recaptcha.error) {
+    if (req.recaptcha.error) {
         req.flash('danger', '¡No has completado el captcha!');
         return res.redirect('/server/' + validator.escape(req.params.id) + '/like');
     }
