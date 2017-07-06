@@ -37,6 +37,10 @@ const newLimiter = new RateLimit({
     message: "No puedes crear tantos servidores en tan poco tiempo."
 });
 router.post('/new', newLimiter, recaptcha.middleware.verify, ensureLoggedIn('/login'), function (req, res, next) {
+    if (!req.recaptcha.error) {
+        req.flash('danger', '¡No has completado el captcha!');
+        return res.redirect('/server/');
+    }
     if (!validator.isAlphanumeric(req.body.name, 'es-ES')) return showerror('El nombre contiene caracteres no permitidos', req, res);
     if (!validator.isIP(req.body.ip) && !validator.isURL(req.body.ip)) return showerror('La IP es inválida', req, res);
     if (req.body.games && !validator.isAscii(req.body.games)) return showerror('Las etiquetas contienen caracteres no permitidos', req, res);
@@ -73,6 +77,10 @@ router.post('/new', newLimiter, recaptcha.middleware.verify, ensureLoggedIn('/lo
 });
 
 router.post('/:id/edit', newLimiter, recaptcha.middleware.verify, ensureLoggedIn('/login'), function (req, res, next) {
+    if (!req.recaptcha.error) {
+        req.flash('danger', '¡No has completado el captcha!');
+        return res.redirect('/server/' + validator.escape(req.params.id));
+    }
     Server.findOne({'_id': validator.escape(req.params.id)}).populate('owner').exec(function (err, server) {
         if (err) {
             req.flash('danger', '¡No se ha encontrado el servidor! Puede que halla sido borrado :S');
@@ -133,7 +141,7 @@ router.get('/:id/like', recaptcha.middleware.render, function (req, res, next) {
     });
 });
 
-router.get('/:id/edit', ensureLoggedIn('/login'), function (req, res, next) {
+router.get('/:id/edit', recaptcha.middleware.render, ensureLoggedIn('/login'), function (req, res, next) {
     Server.findOne({'_id': validator.escape(req.params.id)}).populate('owner').exec(function (err, server) {
         if(err) {
             req.flash('danger', '¡No se ha encontrado el servidor! Puede que halla sido borrado :(');
@@ -141,7 +149,7 @@ router.get('/:id/edit', ensureLoggedIn('/login'), function (req, res, next) {
         }
         if (server.owner._id !== req.user._id) return showerror('El servidor no te pertenece :P', req, res);
 
-        res.render('edit', {title: server.name, user: req.user, server: server});
+        res.render('edit', {title: server.name, user: req.user, server: server, captcha: req.recaptcha});
     });
 });
 
@@ -153,6 +161,10 @@ const likeLimiter = new RateLimit({
     message: "Vuelve mañana para darle like a otro servidor."
 });
 router.post('/:id/like', likeLimiter, recaptcha.middleware.verify, function (req, res, next) {
+    if (!req.recaptcha.error) {
+        req.flash('danger', '¡No has completado el captcha!');
+        return res.redirect('/server/' + validator.escape(req.params.id) + '/like');
+    }
     Server.findOne({'_id': validator.escape(req.params.id)}).populate('owner').exec(function (err, server) {
         if(err) {
             req.flash('danger', '¡No se ha encontrado el servidor! Puede que halla sido borrado :O');
