@@ -272,6 +272,7 @@ ul.cat.list-inline li a:hover {
 
 .footer a {
     color: darkgray;
+    margin-right: 1em;
 }
 
 .bootstrap-tagsinput {
