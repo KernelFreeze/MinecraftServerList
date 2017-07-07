@@ -17,7 +17,8 @@ if (process.env.NODE_ENV !== 'production') {
     recaptcha.init('6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe');
 } else {
     recaptcha.init('6LfA8ScUAAAAAGyT1EyJ_ny3CWjyBTWqk6EHtQyS', '6LfA8ScUAAAAAOiXYKxUbKVCdPpvZFQXE5cMV_cI');
-    store = new require('rate-limit-redis')({});
+    const RedisStore = require('rate-limit-redis');
+    store = new RedisStore({});
 }
 
 router.get('/', ensureLoggedIn('/login'), function (req, res, next) {
