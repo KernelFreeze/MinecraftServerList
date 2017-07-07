@@ -74,6 +74,10 @@ const serverSchem = new Schema({
         default: "Desconocida"
     },
     automatic: Boolean,
+    top: {
+        type: Boolean,
+        default: false
+    },
 
     // Votifier
     votifier_ip: String,

@@ -7,7 +7,15 @@ router.get('/:page(\\d+)?', function (req, res, next) {
         if(err) return next(err);
 
         if(result.page > result.pages) return res.redirect(result.pages);
-        res.render('index', {title: 'Destacados', user: req.user, servers: result.docs, pagination: result});
+        if(result.page !== 1) {
+            res.render('index', {title: 'Destacados', user: req.user, servers: result.docs, pagination: result});
+        } else {
+            Server.find({ top: true }, function (err, top) {
+                if(err) return next(err);
+
+                res.render('index', {title: 'Destacados', user: req.user, servers: result.docs, pagination: result, top: top});
+            });
+        }
     });
 });
 
