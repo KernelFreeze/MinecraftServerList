@@ -12,10 +12,12 @@ const votifier = require('votifier-send');
 
 moment.locale('es');
 
+let store;
 if (process.env.NODE_ENV !== 'production') {
     recaptcha.init('6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe');
 } else {
     recaptcha.init('6LfA8ScUAAAAAGyT1EyJ_ny3CWjyBTWqk6EHtQyS', '6LfA8ScUAAAAAOiXYKxUbKVCdPpvZFQXE5cMV_cI');
+    store = new require('rate-limit-redis')();
 }
 
 router.get('/', ensureLoggedIn('/login'), function (req, res, next) {
@@ -34,7 +36,8 @@ const newLimiter = new RateLimit({
     delayAfter: 1,
     delayMs: 3 * 1000,
     max: 5,
-    message: "No puedes crear tantos servidores en tan poco tiempo."
+    message: "No puedes crear tantos servidores en tan poco tiempo.",
+    store: store
 });
 router.post('/new', newLimiter, recaptcha.middleware.verify, ensureLoggedIn('/login'), function (req, res, next) {
     if (req.recaptcha.error) {
@@ -158,7 +161,8 @@ const likeLimiter = new RateLimit({
     delayAfter: 1,
     delayMs: 3 * 1000,
     max: 1,
-    message: "Vuelve mañana para darle like a otro servidor."
+    message: "Vuelve mañana para darle like a otro servidor.",
+    store: store
 });
 router.post('/:id/like', likeLimiter, recaptcha.middleware.verify, function (req, res, next) {
     if (req.recaptcha.error) {
