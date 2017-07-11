@@ -4,9 +4,9 @@ block css
     link(rel='stylesheet', type='text/css', href='/css/bootstrap-tagsinput.css')
 
 block content
-    .container
+    .container(itemscope, itemtype='http://schema.org/Product')
         .section-title
-            h3.text-center #{server.name}
+            h3.text-center(itemprop='name') #{server.name}
             hr
         .space
         if(server.automatic)
@@ -17,7 +17,7 @@ block content
         .row
             .col-sm-6.col-md-4
                 .thumbnail
-                    img(src='/server/' + server.name + '/img', alt=server.name)
+                    img(src='/server/' + server.name + '/img', alt=server.name, itemprop='image')
                     .caption
                         table.table
                             tr
@@ -40,9 +40,9 @@ block content
                             tr
                                 td Versión
                                 td #{server.version.replace(/§[0-9a-fA-Flk]/g, '')}
-                            tr
+                            tr(itemprop='aggregateRating', itemscope, itemtype='http://schema.org/AggregateRating')
                                 td Likes
-                                td #{server.likes}
+                                td(itemprop='ratingCount') #{server.likes}
                             tr
                                 td Disponibilidad
                                 td #{parseInt(server.success / server.times * 100)}%
@@ -63,7 +63,7 @@ block content
             .col-md-6
                 .panel.panel-default
                     .panel-body
-                        p !{server.description.replace(/\n/g, '<br>')}
+                        p(itemprop='description') !{server.description.replace(/\n/g, '<br>')}
                 if(server.youtube)
                     .panel.panel-default
                         .panel-body
