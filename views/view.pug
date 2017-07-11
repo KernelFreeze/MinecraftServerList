@@ -10,38 +10,42 @@ block content
         if(servers.length <= 0)
           p ¡No se ha encontrado ningún servidor! Intenta realizando otra búsqueda.
         else
-          table.table.table-striped
-            thead
-              tr
-                th
-                th Servidor
-                th IP
-                th Jugadores
-                if(show_type)
-                  th Tipo
-                th
-                  i.glyphicon.glyphicon-heart-empty(aria-hidden='true')
-            tbody
-              each server in servers
+          .table-responsive
+            table.table.table-striped
+              thead
                 tr
-                  td: a(href='/server/' + server.name)
-                    img.img-thumbnail(src='/server/' + server.name + '/img', alt=server.name)
-                  td: a(href='/server/' + server.name) #{server.name}
-                  td
-                    a.copy(data-toggle="popover", data-placement="top", data-content="¡Copiado!", ip=server.fullip, href='#')
-                      | #{server.fullip}&nbsp;
-                      i.fa.fa-clone.text-info(aria-hidden='true')
-                  td #{server.players}/#{server.max}
-                  if(show_type)
+                  th.hidden-xs.hidden-sm
+                  th Servidor
+                  th.hidden-xs IP
+                  th.hidden-xs.hidden-sm Jugadores
+                  th.hidden-xs.hidden-sm Tipo
+                  th
+                    i.glyphicon.glyphicon-heart-empty(aria-hidden='true')
+              tbody
+                each server in servers
+                  tr
+                    td.hidden-xs.hidden-sm
+                      a(href='/server/' + server.name)
+                        img.img-thumbnail(src='/server/' + server.name + '/img', alt=server.name)
+                    td
+                      a(href='/server/' + server.name) #{server.name}
+                    td.hidden-xs
+                      a.copy(data-toggle="popover", data-placement="top", data-content="¡Copiado!", ip=server.fullip, href='#')
+                        | #{server.fullip}&nbsp;
+                        i.fa.fa-clone.text-info(aria-hidden='true')
+                    td.hidden-xs.hidden-sm
+                      | #{server.players}
+                      i.text-muted /
+                      | #{server.max}
                     if server.type === 2
-                      td.text-danger Solo premium
+                      td.text-danger.hidden-xs.hidden-sm: b Solo premium
                     else if server.type === 1
-                      td.text-warning Semi-premium
+                      td.text-warning.hidden-xs.hidden-sm: b Semi-premium
                     else
-                      td.text-success No premium
-                  td
-                    | #{server.likes || 0}&nbsp;
-                    i.fa.fa-heart.text-danger(aria-hidden='true')
+                      td.text-success.hidden-xs.hidden-sm: b No premium
+                    td
+                      | #{server.likes || 0}&nbsp;
+                      i.fa.fa-heart.text-danger(aria-hidden='true')
         .text-center
           nav(aria-label='Page navigation')
             ul.pagination
