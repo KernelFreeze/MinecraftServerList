@@ -64,11 +64,11 @@ block content
                 else
                   li
                     a(href=url + '/' + i) #{i}
-                if(pagination.page >= pagination.pages)
-                  li.disabled
-                    a(href='#', aria-label='Next')
-                      span(aria-hidden='true') »
-                else
-                  li
-                    a(href=url + '/' + (pagination.page + 1), aria-label='Next')
-                      span(aria-hidden='true') »
+              if(pagination.page >= pagination.pages)
+                li.disabled
+                  a(href='#', aria-label='Next')
+                    span(aria-hidden='true') »
+              else
+                li
+                  a(href=url + '/' + (pagination.page + 1), aria-label='Next')
+                    span(aria-hidden='true') »
