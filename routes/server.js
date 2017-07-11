@@ -9,6 +9,7 @@ const recaptcha = require('express-recaptcha');
 const validator = require('validator');
 const RateLimit = require('express-rate-limit');
 const votifier = require('votifier-send');
+const cache = require('express-redis-cache')({ expire: 60 });
 
 moment.locale('es');
 
@@ -28,7 +29,7 @@ router.get('/', ensureLoggedIn('/login'), function (req, res, next) {
     });
 });
 
-router.get('/:id/img/', function (req, res, next) {
+router.get('/:id/img', cache.route(), function (req, res, next) {
     Server.findById(req.params.id, function (err, server) {
         if (err) return next(err);
         if (!server) {

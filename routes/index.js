@@ -1,8 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const Server = require('../schemas/server');
+const cache = require('express-redis-cache')({ expire: 60 });
 
-router.get('/:page(\\d+)?', function (req, res, next) {
+let shouldCache = function (req, res, next) {
+    res.use_express_redis_cache = !req.user;
+
+    next();
+};
+
+router.get('/:page(\\d+)?', shouldCache, cache.route(), function (req, res, next) {
     Server.paginate({}, { page: Math.abs(req.params.page) || 1, limit: 10, sort: { likes: -1, players: -1 }}, function (err, result) {
         if(err) return next(err);
 
@@ -19,7 +26,7 @@ router.get('/:page(\\d+)?', function (req, res, next) {
     });
 });
 
-router.get('/players/:page(\\d+)?', function (req, res, next) {
+router.get('/players/:page(\\d+)?', shouldCache, cache.route(), function (req, res, next) {
     Server.paginate({}, { page: Math.abs(req.params.page) || 1, limit: 10, sort: { players: -1, likes: -1 }}, function (err, result) {
         if(err) return next(err);
 
@@ -28,7 +35,7 @@ router.get('/players/:page(\\d+)?', function (req, res, next) {
     });
 });
 
-router.get('/free/:page(\\d+)?', function (req, res, next) {
+router.get('/free/:page(\\d+)?', shouldCache, cache.route(), function (req, res, next) {
     Server.paginate({ type: { $ne: 2 } }, { page: Math.abs(req.params.page) || 1, limit: 10, sort: { likes: -1, players: -1 }}, function (err, result) {
         if(err) return next(err);
 
@@ -37,7 +44,7 @@ router.get('/free/:page(\\d+)?', function (req, res, next) {
     });
 });
 
-router.get('/premium/:page(\\d+)?', function (req, res, next) {
+router.get('/premium/:page(\\d+)?', shouldCache, cache.route(), function (req, res, next) {
     Server.paginate({ type: 2 }, { page: Math.abs(req.params.page) || 1, limit: 10, sort: { likes: -1, players: -1 }}, function (err, result) {
         if(err) return next(err);
 

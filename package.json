@@ -15,6 +15,7 @@
     "express": "~4.15.2",
     "express-rate-limit": "^2.8.0",
     "express-recaptcha": "^2.1.0",
+    "express-redis-cache": "^1.0.0",
     "express-session": "^1.15.3",
     "flash": "^1.1.0",
     "minecraft-pinger": "^1.0.2",
