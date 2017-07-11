@@ -23,8 +23,9 @@ block content
             tbody
               each server in servers
                 tr
-                  td: a(href='/server/' + server._id): img.img-thumbnail(src=server.icon, style='width: 100%; max-width: 64px; max-height: 64px; display: block')
-                  td: a(href='/server/' + server._id) #{server.name}
+                  td: a(href='/server/' + server.name)
+                    img.img-thumbnail(src='/server/' + server.name + '/img', alt=server.name)
+                  td: a(href='/server/' + server.name) #{server.name}
                   td
                     a.copy(data-toggle="popover", data-placement="top", data-content="¡Copiado!", ip=server.fullip, href='#')
                       | #{server.fullip}&nbsp;

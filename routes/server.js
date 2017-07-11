@@ -22,9 +22,22 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 router.get('/', ensureLoggedIn('/login'), function (req, res, next) {
-    Server.find({ owner: req.user._id }, function (err, servers) {
+    Server.find({owner: req.user._id}, function (err, servers) {
         if (err) return next(err);
         res.render('servers', {title: 'Mis servidores', user: req.user, servers: servers});
+    });
+});
+
+router.get('/:id/img/', function (req, res, next) {
+    Server.findById(req.params.id, function (err, server) {
+        if (err) return next(err);
+        if (!server) {
+            res.status(404);
+            res.send('Not found.')
+        }
+        let img = new Buffer(server.icon.split(/,\s*/)[1],'base64');
+        res.writeHead(200, {'Content-Type': 'image/png' });
+        res.end(img, 'binary');
     });
 });
 
@@ -50,7 +63,7 @@ router.post('/new', newLimiter, recaptcha.middleware.verify, ensureLoggedIn('/lo
     if (req.body.games && !validator.isAscii(req.body.games)) return showerror('Las etiquetas contienen caracteres no permitidos', req, res);
     if (req.body.youtube && !validator.isURL(req.body.youtube, {host_whitelist: ['youtu.be', 'youtube.com']})) return showerror('El enlace al tráiler de YouTube no es válido', req, res);
 
-    if(req.body.port && (req.body.port > 65535 || req.body.port <= 0)) return showerror('El puerto no es válido', req, res);
+    if (req.body.port && (req.body.port > 65535 || req.body.port <= 0)) return showerror('El puerto no es válido', req, res);
 
     let server = new Server({
         name: validator.escape(req.body.name),
@@ -85,7 +98,7 @@ router.post('/:id/edit', newLimiter, recaptcha.middleware.verify, ensureLoggedIn
         req.flash('danger', '¡No has completado el captcha!');
         return res.redirect('/server/' + validator.escape(req.params.id));
     }
-    Server.findOne({'_id': validator.escape(req.params.id)}).populate('owner').exec(function (err, server) {
+    Server.findById(validator.escape(req.params.id)).populate('owner').exec(function (err, server) {
         if (err) {
             req.flash('danger', '¡No se ha encontrado el servidor! Puede que halla sido borrado :S');
             return res.redirect('/');
@@ -105,7 +118,7 @@ router.post('/:id/edit', newLimiter, recaptcha.middleware.verify, ensureLoggedIn
         server.ip = validator.escape(req.body.ip);
         server.type = validator.toInt(req.body.type);
         server.description = validator.escape(req.body.description);
-        server.games = req.body.games ? validator.escape(req.body.games).split(',').splice(0, 5)  : [];
+        server.games = req.body.games ? validator.escape(req.body.games).split(',').splice(0, 5) : [];
         server.youtube = req.body.youtube;
 
         // Votifier
@@ -126,8 +139,8 @@ router.post('/:id/edit', newLimiter, recaptcha.middleware.verify, ensureLoggedIn
 });
 
 router.get('/:id', function (req, res, next) {
-    Server.findOne({'_id': validator.escape(req.params.id)}).populate('owner').exec(function (err, server) {
-        if(err) {
+    Server.findById(validator.escape(req.params.id)).populate('owner').exec(function (err, server) {
+        if (err) {
             req.flash('danger', '¡No se ha encontrado el servidor! Puede que halla sido borrado :S');
             return res.redirect('/');
         }
@@ -136,8 +149,8 @@ router.get('/:id', function (req, res, next) {
 });
 
 router.get('/:id/like', recaptcha.middleware.render, function (req, res, next) {
-    Server.findOne({'_id': validator.escape(req.params.id)}).populate('owner').exec(function (err, server) {
-        if(err) {
+    Server.findById(validator.escape(req.params.id)).populate('owner').exec(function (err, server) {
+        if (err) {
             req.flash('danger', '¡No se ha encontrado el servidor! Puede que halla sido borrado :(');
             return res.redirect('/');
         }
@@ -146,8 +159,8 @@ router.get('/:id/like', recaptcha.middleware.render, function (req, res, next) {
 });
 
 router.get('/:id/edit', recaptcha.middleware.render, ensureLoggedIn('/login'), function (req, res, next) {
-    Server.findOne({'_id': validator.escape(req.params.id)}).populate('owner').exec(function (err, server) {
-        if(err) {
+    Server.findById(validator.escape(req.params.id)).populate('owner').exec(function (err, server) {
+        if (err) {
             req.flash('danger', '¡No se ha encontrado el servidor! Puede que halla sido borrado :(');
             return res.redirect('/');
         }
@@ -170,8 +183,8 @@ router.post('/:id/like', likeLimiter, recaptcha.middleware.verify, function (req
         req.flash('danger', '¡No has completado el captcha!');
         return res.redirect('/server/' + validator.escape(req.params.id) + '/like');
     }
-    Server.findOne({'_id': validator.escape(req.params.id)}).populate('owner').exec(function (err, server) {
-        if(err) {
+    Server.findById(validator.escape(req.params.id)).populate('owner').exec(function (err, server) {
+        if (err) {
             req.flash('danger', '¡No se ha encontrado el servidor! Puede que halla sido borrado :O');
             return res.redirect('/');
         }
@@ -193,8 +206,8 @@ router.post('/:id/like', likeLimiter, recaptcha.middleware.verify, function (req
                     timestamp: new Date().getTime()
                 }
             };
-            votifer.send(settings, function(err){
-                if(err) console.log(err);
+            votifer.send(settings, function (err) {
+                if (err) console.log(err);
             });
         }
     });

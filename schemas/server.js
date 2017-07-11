@@ -1,5 +1,6 @@
 const mongoose = require('../database').mongoose;
 const Schema = mongoose.Schema;
+const ObjectId = require('mongoose').Types.ObjectId;
 const mongoosePaginate = require('mongoose-paginate');
 
 const serverSchem = new Schema({
@@ -100,12 +101,22 @@ function getYoutube(url){
     }
     return ID;
 }
+function isValidObjectID(str) {
+    // coerce to string so the function can be generically used to test both strings and native objectIds created by the driver
+    str = str + '';
+    let len = str.length, valid = false;
+    if (len === 12 || len === 24) {
+        valid = /^[0-9a-fA-F]+$/.test(str);
+    }
+    return valid;
+}
 
 serverSchem.index({name: 'text', ip: 'text', description: 'text', games: 'text'});
 serverSchem.plugin(mongoosePaginate);
 
 serverSchem.statics.findById = function (id, cb) {
-    this.findOne({'_id': id}, cb);
+    let objId = new ObjectId(!isValidObjectID(id) ? "123456789012" : id );
+    return this.findOne({ $or: [{'_id': objId}, {'name': id}] }, cb);
 };
 serverSchem.virtual('fullip').get(function () {
     return this.ip + ((this.port && this.port !== 25565) ? ':' + this.port : '');

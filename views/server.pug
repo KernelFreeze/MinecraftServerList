@@ -17,7 +17,7 @@ block content
         .row
             .col-sm-6.col-md-4
                 .thumbnail
-                    img(src=server.icon)
+                    img(src='/server/' + server.name + '/img', alt=server.name)
                     .caption
                         table.table
                             tr
@@ -52,11 +52,11 @@ block content
                             tr
                                 td Etiquetas
                                 td #{server.games.join(', ') || 'Desconocidos'}
-                        a.btn.btn-warning(href='/server/' + server._id + '/like', role='button')
+                        a.btn.btn-warning(href='/server/' + server.name + '/like', role='button')
                             i.glyphicon.glyphicon-heart-empty(aria-hidden='true')
                             |  Me gusta
                         if(user && server.owner._id === user._id)
-                            a.btn.btn-primary(href='/server/' + server._id + '/edit', role='button')
+                            a.btn.btn-primary(href='/server/' + server.name + '/edit', role='button')
                                 i.glyphicon.glyphicon-edit(aria-hidden='true')
                                 |  Editar
 
