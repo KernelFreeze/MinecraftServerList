@@ -8,7 +8,14 @@ const serverSchem = new Schema({
         type: String,
         required: true,
         index: true,
-        unique: true
+        unique: true,
+        validate: {
+            validator: function (v) {
+                let re;
+                if (v && v.length) re = /^[a-z]$/i;
+                return re.test(v);
+            },
+        }
     },
     port: {
         type: Number,
@@ -89,10 +96,10 @@ const serverSchem = new Schema({
 /**
  * @return {string}
  */
-function getYoutube(url){
+function getYoutube(url) {
     let ID = '';
-    url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-    if(url[2] !== undefined) {
+    url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+    if (url[2] !== undefined) {
         ID = url[2].split(/[^0-9a-z_\-]/i);
         ID = ID[0];
     }
@@ -115,8 +122,8 @@ serverSchem.index({name: 'text', ip: 'text', description: 'text', games: 'text'}
 serverSchem.plugin(mongoosePaginate);
 
 serverSchem.statics.findById = function (id, cb) {
-    let objId = new ObjectId(!isValidObjectID(id) ? "123456789012" : id );
-    return this.findOne({ $or: [{'_id': objId}, {'name': id}] }, cb);
+    let objId = new ObjectId(!isValidObjectID(id) ? "123456789012" : id);
+    return this.findOne({$or: [{'_id': objId}, {'name': id}]}, cb);
 };
 serverSchem.virtual('fullip').get(function () {
     return this.ip + ((this.port && this.port !== 25565) ? ':' + this.port : '');
