@@ -44,7 +44,7 @@ passport.use(new FacebookStrategy({
 
             if (!user) {
                 user = new User({
-                    displayName: profile.name,
+                    displayName: profile.displayName,
                     _id: profile.id
                 });
                 user.save(function (err) {
