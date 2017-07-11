@@ -40,9 +40,9 @@ block content
                             tr
                                 td Versión
                                 td #{server.version.replace(/§[0-9a-fA-Flk]/g, '')}
-                            tr(itemprop='aggregateRating', itemscope, itemtype='http://schema.org/AggregateRating')
+                            tr
                                 td Likes
-                                td(itemprop='ratingValue') #{server.likes}
+                                td #{server.likes}
                             tr
                                 td Disponibilidad
                                 td #{parseInt(server.success / server.times * 100)}%
