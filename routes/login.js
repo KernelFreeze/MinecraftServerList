@@ -44,7 +44,7 @@ passport.use(new FacebookStrategy({
 
             if (!user) {
                 user = new User({
-                    displayName: profile.first_name + ' ' + profile.last_name,
+                    displayName: profile.name,
                     _id: profile.id
                 });
                 user.save(function (err) {
@@ -55,7 +55,7 @@ passport.use(new FacebookStrategy({
         });
     }
 ));
-router.get('/auth/facebook', passport.authenticate('facebook', {scope: 'email'}));
+router.get('/auth/facebook', passport.authenticate('facebook', {scope: 'name'}));
 router.get('/auth/facebook/callback',
     passport.authenticate('facebook', {
         successRedirect: '/',
