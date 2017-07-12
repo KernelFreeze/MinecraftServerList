@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Server = require('../schemas/server');
 
-router.post('/', function (req, res, next) {
-    if (req.body.search) return res.redirect(`/search/${req.body.search}`);
+router.get('/', function (req, res, next) {
+    if (req.param('q')) return res.redirect(`/search/${req.param('q')}`);
 
     res.redirect('/');
 });

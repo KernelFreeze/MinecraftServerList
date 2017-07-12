@@ -70,9 +70,9 @@ html(lang='es')
                             a(href='/logout')
                               i.fa.fa-sign-out(aria-hidden='true')
                               |  Cerrar sesión
-                  form.navbar-form.navbar-right(action='/search', method='post')
+                  form.navbar-form.navbar-right(action='/search', method='get')
                     .input-group
-                      input.form-control(type='text', name='search', placeholder='Buscar...')
+                      input.form-control(type='text', name='q', placeholder='Buscar...')
                       .input-group-btn
                         button.btn.btn-default(type='submit')
                           i.glyphicon.glyphicon-search
